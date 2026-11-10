@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a2a5c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Özkuruşlar Depo Yönetim Sistemi</title>
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--n:#0a2a5c;--b:#1565c0;--l:#e6eefb;--bg:#eef2fa;--t:#10243f;--m:#5b6b82;--bd:#c5d3ea}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.4 Roboto,system-ui,Arial,sans-serif;background:var(--bg);color:var(--t);padding-bottom:env(safe-area-inset-bottom)}
+header{background:linear-gradient(90deg,#082350,#0d3a78);color:#fff;display:flex;align-items:center;gap:12px;padding:10px 14px;padding-top:calc(10px + env(safe-area-inset-top))}
+header img{height:40px;border-radius:4px}
+header .t{flex:1;font-size:10px;letter-spacing:.06em;line-height:1.3}
+header .r{text-align:right;font-size:10px;line-height:1.3}
+header .r b{display:block;font-size:13px}
+nav{background:#0a2a5c;display:flex;overflow-x:auto;gap:6px;padding:8px;position:sticky;top:0;z-index:5}
+main{padding:12px;max-width:820px;margin:auto}
+.card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 10px #0a2a5c18;margin-bottom:14px}
+h1{font-size:22px;color:var(--n);margin:0 0 4px}
+.sub{color:var(--m);margin:0 0 14px}
+h2.sec{background:var(--n);color:#fff;font-size:14px;margin:18px -18px 12px;padding:11px 18px}
+button{font:inherit;font-weight:700;font-size:14px;border-radius:10px;padding:12px 14px;border:1px solid var(--bd);background:var(--l);color:var(--n);cursor:pointer}
+button.p{background:var(--b);color:#fff;border-color:var(--b)}
+nav button{flex:none;border:0;background:none;color:#fff;white-space:nowrap}
+nav button.on{background:var(--b)}
+button.del{background:#fde8e8;color:#b3261e;border-color:#f3c1c1;padding:6px 12px}
+.g2,.rg,.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.full{grid-column:1/-1}
+.f{display:block}
+.f span{display:block;font-size:12px;font-weight:700;color:var(--m);margin-bottom:4px}
+input,select,textarea{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:#fff;color:var(--t)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--b);border-color:var(--b)}
+input[readonly]{background:#f1f4fa}
+.tile{border-radius:16px;padding:16px;background:var(--l);border:1px solid var(--bd)}
+.tile.dark{background:#0f4488;color:#fff;border-color:#0f4488}
+.tile i{display:block;font-size:44px;font-style:normal;font-weight:300;line-height:1.2}
+.tile small{display:block}
+.tiles{margin-bottom:14px}
+.stat{border-radius:14px;padding:12px;background:var(--l);border:1px solid var(--bd)}
+.stat.dark{background:var(--n);color:#fff;border-color:var(--n)}
+.stat b{font-size:13px;display:block}
+.stat input{background:none;border:0;border-bottom:1px solid #8aa0c0;border-radius:0;padding:4px 0;color:inherit}
+.stat .big{font-size:30px;font-weight:700}
+.stat .sm{font-size:13px}
+.stat.dark .sm{opacity:.8}
+.rw{border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:10px;background:#f8faff}
+.rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700;color:var(--n)}
+.rg{gap:8px}
+.add{width:100%}
+.bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.bar .p{grid-column:1/-1}
+.st{display:flex;gap:8px;margin-bottom:12px}
+.st button{flex:1;font-size:13px}
+.note{background:var(--l);border:1px solid var(--bd);border-radius:12px;padding:12px;font-size:13px;margin-top:14px}
+.it{border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px}
+.it .ac{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.it button{padding:8px 12px;font-size:13px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:20px;opacity:0;transition:.3s;pointer-events:none;z-index:9;font-size:14px;max-width:90%;text-align:center}
+#toast.on{opacity:1}
+#print{display:none}
+.doc{font:12px Arial,sans-serif;color:#000;padding:8px}
+.doc h2{font-size:16px;margin:8px 0}
+.doc h3{font-size:13px;margin:14px 0 4px}
+.doc table{border-collapse:collapse;width:100%}
+.doc td,.doc th{border:1px solid #777;padding:4px 6px;text-align:left;vertical-align:top}
+.doc th{background:#dde6f5}
+.doc .meta td{border:0;padding:2px 8px 2px 0;width:auto}
+@media print{body.pr>:not(#print){display:none!important}body.pr #print{display:block}@page{margin:12mm}}
+</style>
+</head>
+<body>
+<header><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABQAZADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDwaikorI8O77i0UlFAXfcWikqS3j864jhDKpdwuWPA96B6jPzpMj1r3Pxp+zX4n8P+FLnWrXVbPVZ7Qs8trAjKxhAyWUnq3X5cdOhPSuJ+D/w01H4kTaza6bewW1xp9ssiedkK7s+ApI+7wGOcHkAdDkPlLdOonbucHRXQ/EXwjqngbxZdeHNWMT3EADLJGfkkQgFWBPrnp1rnvft/nI9M+1KxD5k7dgopKKBXfcWikooC7FoqWztbm9uUtbOCW5nkO1IokLux9AoGafqNhfabdvaajZ3FncJjfFPGUdc9yCOBRYLy3RXoq9qGjavp9rDd3+lX1pbzj9zJNbsiyHttJGCMc/gaoUA207C0UlFAXfcWikr2XwF+z14q8X+E7DxHaatpNpb3qF445zJvADEc4UjtQlcqEZTdkeN0VLfwC1vZ7YSpKIZWj8xOVbBxkVDQLUWikooFd9xaKSigLvuLRSUUBd9xaKSigLvuLRSUUBd9xaKSigLvuLRSUUBd9xaK9p8Mfs5+Ktd8JWXiSPWtHtba8tVuljmMgdUIyN2FI6c14vIoVyoYMAcZFDTRUoyja4lFJRQTdi0UlFAXfcWikooC77i0UlFAXfcWikooC77hRRRQIKKKKALuhWK6lrlhprySRC6uI4TJHEZWXcwGVReWPOQBya+itT/ZRvPs+/SvF8MkpAOy6tGQH8VJI/I1498KPAPjHxpq4l8KRGE2UiSNqDSmJIH4KncOcjHAUbhX2b8K9P8AiZpafYfG+q6Pq1ssf7u5hVluAeOG4CsPfAPNUkdmHpqXxI2fhxF4ktvCdlYeKVibVLRPIlmhk3JOF4Vx0IJHXI688dKxvA/w+tPCXxC8S6/pZSOw1tInMA4MUys5cKOm053fUntiuq8UatBoHh2/1mdS0dpA0pXPXaOBXyT4j+NPjS71XzxrzabHLIfIt4AoVR2GSDu/H3rGviY0bKWvofVZTw9WzNOcZKMY2V5Oyv2PXvi98Hx8Qfi1pGq3rGDRINOEd88bfPMyyMVjHuQ33uwFVvj78KfAsXwxuNUg08aQdAsZmtBZhIxKzbQqyllLONwAzkHk881gfCz9oC6fXl8P+Mv3yMABfqmzZuxjeB8pX34xXs3xK8GW3xA8NJolzqt5Y2Ekqyzm02h5lGSF3MCAM4PQ9BWlKrCrHmiefmeT1MBUlCor6tXWqb/4B+dn+OP8iivtS+/Zu+GsOjzrFaanLcCJikj6gQSwHrjaPyr4wvIGtr2e2ZV3xuyHa4ZSVODgjg02fPVKMqbsyKiirek6fearqdvpmnwPcXdzIIookGSzGkZWd7HqP7MHjjwp4H8V6jfeKFkjE9qIra4WAyGIhslcAZGQBg89K0Pih8U/DHiv42+HvEi6dLLoWktGkheMeZOquWZtp7cgAd8da9j+HXwE8EeEdBXUvGMdrq18sfm3U14QLaDHUBSdpA6EsTnHQV0ukad8EPFFy+l6VZeDtSm24MMEUTNgDPYVdjvjSny8rPGv2lPjN4S8Y+Co/DXhrz7t5blJpJ5ISiRhQTgBuSxJA6Yxn1r5wNe+ftRfB/TPBUFt4m8NJJDpdxOLea0Zi4hkILAqTztO3H9eay/2XNH8Balf63N48k0j7PFDEltHf3AjBYkliMsOmP1pNamE4ylU5WeMcetHHrX29/wjP7Ow6p4PH1v1/wDi66CH4QfCuWFZk8H6UyMoZWUsQQRwfvf5zRystYRvVM+AOvTnNfoRorp4K+BlpPJ+6Ol6Ejnthliz/wChV8feJtM0XVf2gzovh22t4tJuNZgsoIoOY9gZI2I9QTuP419U/tRaguk/AvWo0+UzrFaRj13SKCP++QaI6FYdcqlLsfB7EklieTnJPUUp6479h3Nevfs8/B688famurarHJb+HLZ/nccG6cH/AFan065bt05Jr2D436V8HPhx4daVvBuk3GsXSkWNm27943Qu3P3Bn8SMD1pWMo0HKPO3Y+QP8OPejtX0h+yR4D8N+MLHxJrHiXRLW+jF1FFbIwISIhWZwoB44dK87/aX0zQdE+LF7o/h7T4NPtLO3hQxQ527ym4n/wAeH5UraESpNQ5+55n2yfXFA5P+ePr719AfsgeA/D3i2TxDe+JNJg1GG2EEUKy5wGYuxPBHYCuU/al0jw9oHxQbRvDem2+n21rYxLLFDnBlbc+TknnayCi2gOk1TUzyv0xzkZBHek7kd8Zr6z/Z0+DHgvU/h9p/inxJpjaje3waTZcSHyo0ViF+UYzwM/NnrXoOlaX8D9YNxpWnWPg27a3UmaOJISUA6knrgd+arlZpHCtq7e58GHg4PX8v/wBVIfw/OvUfiZ4a8Fv8YtP0TwFqCXmmahcwwvHCxdIJXk2MiOeHXlTwT19q9z/aD+Hnw88K/CbV9W03wvp1pehY47aVAwZHaRRkc+maLEqg2m77Hx39PSj/AD/9b61Z0q0a+1O0sYwWkuJ0iAHdmYKP5ivsH44fDv4c+EvhJrWq23hfT4byK28q3mAbcJHIQN1685qUmTTpOa5ux8bHj88dcUnHPPSvS/2f/he/xJ8STxXM8tro+nqHu5owN53Z2IhPQna3POMdK+nL3RvgR4DMWlapZ+GLK42Aqt4qyykHoSWy3PbJqrFU6Dmr3sfDHfHU5x0I/nTkVncIiszE4AAyTzgV9p/EP4SfC/xX4MuNa0ZdK0cCB5YNTsnWO3+XOd4B2FeOehGOtfLHwe0v+1viv4b01lDq+pRFwOQVVgzfoppBKjySSPtXx5Ovgr4F3+w7Dpuirax47N5YiX8dxFfn5z7D6Cvt39sbUvsPwYuLXODqF9Bb9eoDGU/+i6+M/DOk3GveILDRrWSGOa9nWFJJXCopJxkntTZpi37yijO6dSB7Zwfype4Hc9u5r7U8M/BP4YfD7w//AGj4rNrqEkeDNe6m+2FT6ImdoHscn37V0WhaB8GPG2nzRaLo3hjU4Y/llFvbIGTt2AYUcolhZNa6HwR7d89vzx9cUd8Dn0wCfT/GvSP2h/ANr8PviA2mac0h026tlurUOclFLMChPf5lP5j1ruP2VPhT4b8b6dqeveJrWa8gtbpLeCDzSsbEIGfdjk/eXvStrYxjSk5cp8/9OvX07/lR16c8fh3/AE9xX3rHo/wS07Wh4VXTfCMWqEhRYvHEZiSMgfNzk56Zr54/ap8P/DfR9Ztm8HXVpBqfmsl/p1q29E4yH44RgRjZnv0puJrPD8kea54jRRRUnMFFFFABRRRQAUUUUAejfBz4u678NRd29hZWd/ZXkgkmhnBDbgMZVh0445BHtXvXh/8Aak8L3vlQaj4b1yG5kYJi1VLhS3p94H9K+TNB0u81zWrPSNOj827vZ0ghQkDc7HA5PQZ719ufBP4K+H/ANvHqF4keqeISvz3jpxBkfcjU9AP73Uj06VUUzswzqS0T0Oz162bxj8Pr22W0ubNtRs3VIrpNkkZI+XcvOOa+I/EWn3Gl3dzaahYO11ZS7ZIivzI2ecZ7e/ftmv0AyB9Rz1rhPiB8N/C/jovPcp5Gow/J9stmG9cYO1h0PUcEfTFcuLwzq2lHofecMZ/DLVPD17+zn13afex8R3OrwPbYtS7XL5SKMxkHcc/y96+4vgZc3l38KNAlvmLTi22Fj1YKxAPvwBXAaX+znpkOorPqOvz3VsrAtEkAjLj+6W3Hiva9Nsbaws4bSyiSC3gQJFGgwqqOAB+FThKE6TvJW/E34nzmhjoRhTnzta3UXFde/V9emh4z8bfg34k8XfabzQfG+q5lk3tpd/eObQZPIUL93HoQfrXyZ4y8H+I/B+pHT/EWkz2MoxtZgCj85BVl+Vvwz74r7N+KfjLxv8O7yXXzpMPiTws7DzBF+5n0/jHJGdyE/wARHHcjivNPjB8ZvAfj74UX+mRXF7p2qPtkht7mxEmWVugfBC5/vAgjtXYz8/rU4PW+p8v171+xZ4bXU/iHea/PDvi0m0Pkse00hwP/AB3zK8Fr7A/YdsVh+Hur3+PnuNT2E+oSNcD8NxoSOfDxvUOV/bb8X3Larpvgq1mkSCOEXl4qnh2bIQMOhACk8+teN/A950+L/hVrdmWT+1IVyOu0nkfTGeK2f2n717745+IiWBWJ44FXPQJEg/mD+daH7JWiS6v8ZtOuREXg0yOW6mbGQhClUz77mFHUqTcq1vM+g/2w5Y0+Ct4HIzJeW6p9d27+QP618RYGcDP4dj3r6w/bm1yOPw/oPhtG/ez3TXrL/sopQfq5/KvGPgH8L7z4jeJ1E8bxaFZuGvrjHDjOREp/vN+g59AR6seITnUsjsf2WvhD/wAJPfp4u8RWv/EltHH2WCRRi7kA6kd0X9T+OO//AGqvi3/YNjL4H8N3TLqdwn+nTxnH2aIj7gI6Ow/IZrrPjj8RNH+E/gq20bQ47ePVZYBDptmgG2FB8vmEeg7Z6n6NXw/fXdzfXs15eXElxczSGSWZ2yzsepJ7k9frTbRVSaox5I7npP7LmlPqvxu0IeXmK0aS6l77dkbbD/30Vr65+L/gg/EGw0nQ7qZodLjvhc3zI+2RkVGARfcs34YrwD9hnTfN8aa9qzLkW1gsIOOhd8/yQ19JfEDx14d8C6dBea9erD9okEUEQ5kkyQCQPRQck+n4ZIrQ2w8Uqd2YfxR8ZaD8I/AUEkFiiAD7NptjCm1S4HGcdEXqT1+p5r4X8YeI9W8V+IbvXdbuTcXl0+5ifuqOcKo7KBwB6V9q/tT+GH8S/B/UHt4xJdaW66hD6kICH/8AIbOcd8CvhP169M0mzDFt8yXQ+3v2PdJfTPgzBcOgB1G9muh7g7UB/wDIdfJPxY1Vtb+JfiTUy+9ZtSm8s/7AYqv5BRX3D8PI18M/A/SWUAfYdDW4OP73leYf1Jr8+HZnYyOSxZuWPc5yaGPELlhBH2j+xjpAsPhM+pEBX1O9lkz6qh8sfqpr5h+OmqtrXxe8T6gW3j7e8KnP8Mf7tf0QV9l/BeCLwz8B9Akn2xRQaT9tkJ/hDhpmz9Nxr4f8L2z+JviHpdo4Mj6pqsauDznfIMn8iTQx1laEYn3KIR4J+BLRDKHS9AfHs6w5/wDQq/PxXdSxVmUsCpIPJB6gnuD39a+6/wBq3VxpPwW1ZN2Hv3itE99zZI/75Vq+EqGTinZpLoemfswaUuqfG7QEdAy27yXR46bIywP/AH1ivcf25NT+z+BtD0lXwbvUWmI/vCOMjH5yL+VcF+w/pwuPiHq2osAfsmmlFPoXkUfyU1Z/bl1IzeMtB0rPy2tk82M95Hwfxwgp9Bw0oN9zzT9nrSl1n4zeGrN03xrdGdxj/nmhk/mgr6L/AG2tS+y/DCw08Phr3U0yPVURmP8A49tryr9irSmvPird6kV/d6fprtnrh3ZUA/FS/wCVbn7c+rNJ4l8PaGGysFm90y57u5Uf+gGjoEPdoN9ze/Yav7M+H/EWngqt6lzHO6nALRlSAR7Ag59Mj1GeZ/ad+EXi6TxjqnjXSYJNX068KPIkJLzW+1QCCnUoMZyvTPSvD/CHiXW/Cetxaz4fv5LK8j+XegyGGfuspGCCRjkYz9BX1h8G/wBojSfFWoWugeJbRdJ1O42xQzo+YLh/Qf3CfTJpJjpzhUj7N7nyRJrOtLon/CPvqF4mmRTmb7EZGESy4ALFPXA7+px1r1T9jzSDqPxmt7ohTHptlPcn05AjH4/vAfwr0X9sf4eaRDoEfjrTrdLa/S4SG98tQqzq2drkD+IHAz3zVL9hPTc3HijWGQZVILdGx6l3YfolFtSY05RrJNlj9urWdtv4b0FW+88t26/QbF/m4r5byRhs7TkMnY5z1/8Ar17X+2bqf234vLZq+4WOnwxEA9GYs/8A7MK6X9k34T6Vrtm/jbxLaR3lusxjsLaQZjcqRmRx/Fzxg5HFD1YqkXVqux5rBp3xc+JWl6XpyWGtazY2Cslo8qkRAN1JlfCsQOASxIHFe8fsrfC3xZ4E1vWNT8TWcVmbu1SGJFuEkJO/JJ2E88Cr/wAVf2iNA8G6xcaBoelHWL60YxzkSCKGBx1XIByR3rtfgR431P4geCW8RanYW9kXu5IoY4CxBRQBnJ98/lTRvTpwjO97s+bP209RF38W4LJWBFjpkMbD0Zmd+fwZfyFe8fsmaUul/BPTJtm17+aa6k9yX2g/ki18p/tB6sms/GXxLeo+5PtXkKfaNVj/AJqa+y/Dzp4L+BdlNJiI6ZoSyvnswi3H/wAeoTFRd6spHw18RtWfVviJr+rrMT9o1OaWNgTwvmNsx9AABXPEk9eTz1oJySTyT3pKg4m22FFFFBAUUUUAFFFFABRRRQA+KSSGZJoZHjkQ7ldGIYHOc5HfNfTvgD9o7wx4Z+H2maPc6Xr1/qVrBtlaSVHEkhJLN5hbdtyTjg4GBzivl+g8jGeM9P8APNO7NKdR09j2zx5+0j438QQSWmjxQeHrZ/4rZ2e4x6eYcY/BRXvH7JSXEvwdtr+7nlnmvb24nklkYsznfsySeSfl/SvhuvtP9kfxPoknwn0rQG1O0TU4bm4i+yNMolbLvKCEzkjaTzjsaIs6cPUcp3kz0b4meNdK8B6DDrOrZMMl3DbYU8/O2GYeu1QzY77ccda6WKRJo1kjZZEYBkZTkMD0IIr4u/a2+IMfivxpHoGlziXStGLIWQ5WW4PDsPYDCD33V3n7Ofxz0Ow8Gjw74yvRZzaXEfsty+WFxED/AKsYz86jjHcY6VVzdYhOo4nqd78Vvh8dT1nw34i1CLS7qzd4Lq21GPakqjup5VlZSCBnJB6V8NeMhof/AAlmpt4aaRtINzJ9kMgw+zOQOO1dx+0x4k8NeLfiV/bXhidbmCSyiSeYRkb5Bn+8M8KUH4V5h3PvUyZx4irzy5Qr6q/Yi8VWS6Xqng+eVY703BvbdSQPNQqqvt9SCAfoc9q+Vamsrq5sruO7s55Le4jYMksbFWUjgEEdwOKLkUans5XPsT4v/s8W/jfxnc+JdP8AEh0yW7CG4ge181cqqqGXDAjhQcY68113wu+Hvhr4QeGL+4fVfMMgEt/qN0FjUKucAD+FBk8ZPJPNfKdh8d/ipZ24hTxTJMB0M9vFI34krk1zfjPx/wCMPGIVPEWu3V7EhLJESFjU+oVcDPvVaHQ61Ne8lqdH8UPE0nxZ+MURtC0VpcXMWnWBK8rD5mA5Hqd2fxxX2z4E8KaV4N8L2ugaJGI7eBclmGWlc8s7nuSf89K/OTTL670zUbfUbCdre7tpFlhlT7yMpBBH5Cuz/wCFxfE7/oc9U/77H+FJMilXUZc0tz6I8a/s4y+LvEt7r2sePbuW5un3EfYBtReyL+84UdB7V5R8cvghZfDbwhDrqeJp9QlmvEtUha1EYyyu2c7j0CHtXHf8Lj+J/wD0Omqf99j/AArH8VeOvF3iqzitPEWvXmpQQyeZGkxBAbGM9PTP50aBUqUpK6Wp9M/sPaU1r4G1nV3XH26+EaHHVY1xn82P5V4j+1Dr0+t/GXWI3maSDT3FnApOQmxRu47fMW/H8Qeb8OfEbxx4c0pNL0PxJe2FkjMywxFQAWOT2rnNRvbvUb+4v76d7i5uJDLLI55ZySST9c0XIlWXs1FH3v8AAvX4/HHwd0u4vNskhtjY3gzncyDY2fcrg/8AAq+HfiBoE3hXxtq/h6Ykmxu3iVsfeQ8q2D6qVP41Y8K+PfGPhaxksfD/AIgvNOt5JDK0cRGNxABPT2H5Vl+Idb1XxBq0ura1eyX19KFEk0n3mAAUdPZRRcdWqqkV3Pv34Varpni34UaRJA0c9vNpyWtwqsPlYIEdD7jFeQf8Mm6R/aJf/hMrz7HuyIvsKeaF9N+7H47a+bvCPjHxP4SuZLjw5rV1pry48zymBV8cDcpyGwPUGuvl+PXxVkh8r/hKXT/aS1hB/PZT0Nfb05pcy2Pqv4631n4V+BOt2scywounDT7ZWcAtuxEFGepweg7Cvlr9lPTBqXxt0csm5LRJrpuOBtjIU/8AfRFef+Itf1vxFfm/1zVLrULkgjzZ5CxAPUD0HbAp/hjxHrnhjUTqOgalPp900ZjMsWN204yOfpSuZzrqc07aI+n/ANufUzH4S8PaQGx9qvpLgj2jj2/+1a+Sq3PFfi3xJ4rlt5fEWsXWpSW4KxNMwOwMQWxj1xWHSuZVantJ3Pff2Jtds9O8e6rpV1KkT6laAW+5sb3jfO0e5DE/hXt3xs+CumfEu+s9SOsTaVfW0RiMiQCVJUzkBl3LyMnnPevhaJ3ilWWN3SRWDB1YhgR0II716Lpnxw+KOn2y28fiu4lRRgGeGORv++mUn9acX3NqdaKhyyR9ZfBH4TWHwvt9Q+z6vPqdxfeWJJJIRGFCZwFUE4+8e9fL37U2s2mtfG6/KXAms7SOC18yJgwwEDMF55wzuPqK5vxN8VPiD4jtXtNW8UXsttJ9+GPbEjfUKBmuL9enPt69f8frQ32FVrxcVGK0PtXTfgz8M/E/wltNM8PvmG4C3MGrqivcO/PLHjI5I2cVhfD39mSDw94ts9c1XxN/aEFlOs8NvFaeVvZTuUsSxwAQOADnHWvD/gHfeLW8XR6N4d8X/wDCOQXAMt1PMUMKqq5BKPgMc4GOCM9a9U+LHinxT4Z8PzNP8crTUb1wqwWWlWEKyyknGWkR8xgeo/KmbRnCUeZxNb9tLxtp0fhu28EWs6S6hcTx3N0inJhjGSoPoScHHoM9CKufsNyW/wDwr3W0UqbkasTIAednkx7f1DivkW4mmuLiS4uJZJZpCS7uxZmJ65J/z+hGp4V8T+IPCuoG/wDD2rXWnXBXazxPjcOwI6EfUUrmKxC9pzs96/a7+GtjpRu/iGuszvNqF7HB9ikiG0MUOSHJ6YjPGPxr0b9jzX9Nv/hHa6LDOn27SppY7iLPzgSSNIrY7ghsA9OK+U/GfxH8aeMdPi0/xHrst/awyiZImijVQ4BGflUdmP51h+H9a1bw/qSalomoXGn3cedssD7Tg8kH1BPbp1ovYft4xq8yR9O+P/2ZLjW/GF9rOleKYLe3v7l7l4rm2LNEznJCkH5hkkjOMZ717N4F0Cx+HHw7t9GF8k0OmwPJLcyARhySWLEZOASfWvjxPj78Vlh8s+Jt3H3jaQ5/9Brk/F3jvxf4sVU8ReIL3UIlbcsUj7YwfXYuBn3xTuWq1OLvFDPDsDeJviPp1vIN7arq0avnn/WzDOfzJr7P/afv10n4Ga3HGdvnpFaRgf7TqCP++Qa+GdI1C90nU7fU9OuHtry2cSQyp1Rh3Fb3if4g+NPE2m/2br/iO+1Cz3iTyZSNu4AgHp2zSuY06qhGV+py9FFFSY3CiiigQUUUUAFFFFFx2Ciiii4WCiiii4WuFS2lxc2k6T2txLBKnKPG5VlPIOCOnBI/E1FRRcErCk5OTyc559f8/pn60lFFFwsKec5yT655pKKKLhYKKKKLhYKKKKLhYKKKKQcoUUUU7hYKKKKQW6hRRRQFtbhRRRTuFgooopBYKKKKdwsFFFFAWCiiikFg/H8/8/SgZGcHGTk44zRRTuFnawUUUUgsFFFFAWCiiincLBRRRSCwUUUU7hYKKKKLhYKKKKLhY//Z" alt="Özkuruşlar"><div class="t">MERKEZ DEPO<br>DEPO YÖNETİM SİSTEMİ</div><div class="r">SEVKİYAT OPERASYONU RAPORLAMA<b id="hd"></b></div></header>
+<nav id="nav"></nav>
+<main id="app"></main>
+<div id="print"></div>
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const fd=s=>s?s.split('-').reverse().join('.'):'';
+const lines=x=>String(x||'').split('\n').map(l=>l.trim()).filter(Boolean);
+const days=r=>r.b&&r.s?Math.max(0,Math.round((new Date(r.s)-new Date(r.b))/864e5)+1):'';
+const LS={get(k,f){try{const v=JSON.parse(localStorage.getItem(k));return v==null?f:v}catch(e){return f}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Kayıt yapılamadı: tarayıcı depolaması dolu veya kapalı')}}};
+const LOGO=$('header img').src;
+const TT={sev:'Sevkiyat Operasyon Raporu',mesai:'Fazla Mesai Takip Raporu',izin:'Personel İzin Takip Raporu'};
+const IZIN=['Yıllık izin','Mazeret izni','Raporlu / hastalık','Ücretsiz izin','Serbest izin','Diğer'];
+const blank={
+ sev:()=>({date:today(),reporter:'Sevkiyat ve Operasyon Sorumlusu',chief:'ENGİN KELLE',tS:23,tK:23,
+  st:{sofor:'',izinli:'',izinliN:'',kamyon:'',kamyonN:'',pasif:'',pasifN:''},
+  rows:[{p:'Tamamlanan Sevkiyat Bölgesi'},{p:'Operasyon Tamamlanma Saati'},{p:'Erken Çıkış Yapan Sevkiyatlar'}],
+  per:[{k:'Aktif Sevkiyattaki Şoförler'},{k:'Araç Bakım / Muayene Şoförü'},{k:'İzinli Şoförler'}],names:'',
+  fleet:[{k:'Aktif Sevkiyattaki Araçlar'},{k:'Serviste / Muayenede Araçlar'},{k:'Filoda Kullanılmayan Araçlar'}],plates:'',
+  dT:"Sevkiyatın 13:00'a Sarkmasına Neden Olumsuzluklar:",delay:''}),
+ mesai:()=>({date:today(),prep:'',rows:Array.from({length:6},()=>({})),note:''}),
+ izin:()=>({date:today(),prep:'',rows:Array.from({length:5},()=>({})),note:''})
+};
+let page='home',sub='mesai',drafts={};
+const fix=(t,o)=>{const x=Object.assign(blank[t](),o);if(t==='sev')x.st=Object.assign(blank.sev().st,o&&o.st);return x};
+const getD=t=>drafts[t]||(drafts[t]=fix(t,LS.get('ozk_d_'+t,null)));
+const saveD=t=>LS.set('ozk_d_'+t,drafts[t]);
+let tt;
+function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2600)}
+function setPath(o,p,v){const k=p.split('.');let c=o;for(let i=0;i<k.length-1;i++)c=c[k[i]];c[k[k.length-1]]=v}
+
+/* form helpers */
+const inp=(t,f,v,l,o={})=>`<label class="f ${o.w||''}"><span>${l}</span><input data-t="${t}" data-f="${f}" type="${o.type||'text'}" value="${esc(v)}" placeholder="${o.ph||''}"${o.ro?' readonly':''}${o.id?` id="${o.id}"`:''}></label>`;
+const sel=(t,f,v,l,o)=>`<label class="f"><span>${l}</span><select data-t="${t}" data-f="${f}">${['',...o].map(x=>`<option${x===v?' selected':''}>${x}</option>`).join('')}</select></label>`;
+const area=(t,f,v,l,ph)=>`<label class="f"><span>${l}</span><textarea rows="5" data-t="${t}" data-f="${f}" placeholder="${ph}">${esc(v)}</textarea></label>`;
+const row=(t,i,f,l)=>`<div class="rw"><div class="rh"><span>${i+1}</span><button class="del" data-del="${t}:${l?l+':':''}${i}">Sil</button></div><div class="rg">${f}</div></div>`;
+const bar=t=>autoBox()+`<div class="bar"><button class="p" data-act="save:${t}">Kaydet</button><button data-act="pdf:${t}">PDF / Yazdır</button><button data-act="word:${t}">Word indir</button><button data-act="xls:${t}">Excel (.xlsx)</button><button data-act="draft:${t}">Taslağı kaydet</button><button data-act="new:${t}">Yeni rapor</button></div>`;
+
+/* views */
+function vHome(){const r=LS.get('ozk_r',[]),a=r.filter(x=>x.type==='sev').length,b=r.length-a,p=n=>String(n).padStart(2,'0');
+return `<section class="card"><h1>Depo Yönetim Sistemi</h1><p class="sub">Günlük operasyon ve personel raporlaması</p>
+<div class="tiles"><div class="tile dark"><b>Sevkiyat Raporları</b><i>${p(a)}</i><small>Günlük operasyon takibi</small></div><div class="tile"><b>İzin ve Mesai</b><i>${p(b)}</i><small>Personel takibi</small></div></div>
+<div class="g2"><button class="p" data-go="sev">Sevkiyat raporu oluştur</button><button data-go="izin">Mesai / izin raporu oluştur</button></div>
+<div class="note">Bu ilk sürümde kayıtlar bu tarayıcıda saklanır. Farklı cihazlarda ortak kullanım için çevrimiçi veritabanı ve kullanıcı girişi ayrıca kurulmalıdır.</div></section>`}
+
+function vSev(){const d=getD('sev'),s=d.st;
+const card=(c,l,k,nk,txt)=>`<div class="stat ${c}"><b>${l}</b><input class="big" type="number" inputmode="numeric" data-t="sev" data-f="st.${k}" value="${esc(s[k])}">${nk?`<input class="sm" data-t="sev" data-f="st.${nk}" value="${esc(s[nk])}" placeholder="Açıklama">`:`<small class="sm">${txt}</small>`}</div>`;
+const list=(l,fs)=>(d[l]||[]).map((r,i)=>row('sev',i,fs(r,i),l)).join('')+`<button class="add" data-add="sev:${l}">+ Satır ekle</button>`;
+const four=(l,c3,c4)=>(r,i)=>inp('sev',`${l}.${i}.k`,r.k,'Kategori',{w:'full'})+inp('sev',`${l}.${i}.s`,r.s,'Sayı',{type:'number'})+inp('sev',`${l}.${i}.n`,r.n,c3)+inp('sev',`${l}.${i}.a`,r.a,c4,{w:'full'});
+return `<section class="card"><h1>ÖZKURUŞLAR MERKEZ DEPO</h1><h1 style="font-size:18px">SEVKİYAT OPERASYON RAPORU</h1><p class="sub">Lojistik ve Operasyon Direktörlüğü</p>
+<div class="g2">${inp('sev','date',d.date,'Rapor tarihi',{type:'date',w:'full'})}${inp('sev','reporter',d.reporter,'Raporlayan',{w:'full'})}${inp('sev','chief',d.chief,'Sevkiyat sorumlusu',{w:'full'})}${inp('sev','tS',d.tS,'Toplam şoför',{type:'number'})}${inp('sev','tK',d.tK,'Toplam kamyon',{type:'number'})}</div>
+<div class="g2" style="margin-top:14px">${card('dark','Aktif sevkiyat şoförü','sofor','',`Toplam ${esc(d.tS)} şoför içinde`)}${card('','Bakım / izinli şoför','izinli','izinliN')}${card('dark','Sevkiyattaki kamyon','kamyon','kamyonN')}${card('','Pasif / servisteki kamyon','pasif','pasifN')}</div>
+<h2 class="sec">1. Operasyon ve sevkiyat özeti</h2>
+${list('rows',(r,i)=>inp('sev',`rows.${i}.p`,r.p,'Parametre',{w:'full'})+inp('sev',`rows.${i}.v`,r.v,'Durum / değer',{ph:'Örn. 35 + 1 şube'})+inp('sev',`rows.${i}.a`,r.a,'Açıklama'))}
+<h2 class="sec">2. Personel / şoför durum detayı</h2>
+${list('per',four('per','Personel isimleri','Operasyonel statü / açıklama'))}
+${area('sev','names',d.names,'Aktif sevkiyatta yer alan şoför listesi (her satıra bir isim)','Abdulbaki Almaz\nAdnan Aker')}
+<h2 class="sec">3. Kamyon filosu durum detayı</h2>
+${list('fleet',four('fleet','Plakalar','Operasyonel durum'))}
+${area('sev','plates',d.plates,'Sevkiyatta kullanılan kamyon plakaları (her satıra bir plaka)','34 EFH 122\n34 HAR 489')}
+<h2 class="sec">4. Operasyonel aksama ve gecikme analizi</h2>
+<div class="g2">${inp('sev','dT',d.dT,'Alt başlık',{w:'full'})}</div><div style="height:10px"></div>
+${area('sev','delay',d.delay,'Gecikme gerekçeleri (her satıra bir madde)','Rampa kullanım engelleri...\nFilo kapasite darboğazı...')}
+${bar('sev')}</section>`}
+
+function vMesai(){const d=getD('mesai');
+return `<h2 class="sec">Personel fazla mesai takip raporu</h2>
+<div class="g2">${inp('mesai','date',d.date,'Rapor tarihi',{type:'date'})}${inp('mesai','prep',d.prep,'Raporu hazırlayan',{ph:'Adı soyadı'})}${inp('mesai','tot',d.rows.filter(r=>r.n).length,'Toplam fazla mesai personeli',{ro:1,id:'tot',w:'full'})}</div>
+<h2 class="sec">1. Fazla mesai görev detayları</h2>
+${d.rows.map((r,i)=>row('mesai',i,inp('mesai',`rows.${i}.n`,r.n,'Adı soyadı',{w:'full'})+inp('mesai',`rows.${i}.d`,r.d,'Fazla mesai süresi',{ph:'Örn. 2 saat'})+inp('mesai',`rows.${i}.t`,r.t,'Görev / açıklama',{ph:'Görev'})+inp('mesai',`rows.${i}.c`,r.c,'Çıkış saati',{type:'time'})+inp('mesai',`rows.${i}.r`,r.r,'Dönüş saati',{type:'time'}))).join('')}
+<button class="add" data-add="mesai">+ Personel ekle</button>
+<h2 class="sec">2. Genel açıklamalar ve operasyonel notlar</h2>
+${area('mesai','note',d.note,'Mesai açıklamaları','Fazla mesainin nedeni, görev kapsamı, serbest izin mahsuplaşması, trafik veya araç servisinden kaynaklanan gecikmeler...')}${bar('mesai')}`}
+
+function vIzinR(){const d=getD('izin');
+return `<h2 class="sec">Personel izin takip raporu</h2>
+<div class="g2">${inp('izin','date',d.date,'Rapor tarihi',{type:'date'})}${inp('izin','prep',d.prep,'Raporu hazırlayan',{ph:'Adı soyadı'})}</div>
+<h2 class="sec">1. İzin kayıtları</h2>
+${d.rows.map((r,i)=>row('izin',i,inp('izin',`rows.${i}.n`,r.n,'Adı soyadı',{w:'full'})+sel('izin',`rows.${i}.tur`,r.tur,'İzin türü',IZIN)+inp('izin',`rows.${i}.g`,days(r),'Gün',{ro:1,id:'g'+i})+inp('izin',`rows.${i}.b`,r.b,'Başlangıç',{type:'date'})+inp('izin',`rows.${i}.s`,r.s,'Bitiş',{type:'date'})+inp('izin',`rows.${i}.a`,r.a,'Açıklama',{w:'full'}))).join('')}
+<button class="add" data-add="izin">+ Personel ekle</button>
+<h2 class="sec">2. Genel açıklamalar</h2>
+${area('izin','note',d.note,'Notlar','İzin planı, yerine bakacak personel, dikkat edilecek konular...')}${bar('izin')}`}
+
+function vIzin(){const m=sub==='mesai';
+return `<section class="card"><h1>İzin ve Mesai Raporlamaları</h1><p class="sub">Personel fazla mesai ve izin kayıtları · Özkuruşlar Merkez Depo</p>
+<div class="st"><button class="${m?'p':''}" data-sub="mesai">Fazla mesai takip raporu</button><button class="${m?'':'p'}" data-sub="izin">Personel izin takip raporu</button></div>${m?vMesai():vIzinR()}</section>`}
+
+function vPast(){const r=LS.get('ozk_r',[]);
+return `<section class="card"><h1>Geçmiş Raporlar</h1><p class="sub">Bu tarayıcıda kaydedilmiş raporlar</p>${r.length?r.map(x=>`<div class="it"><b>${TT[x.type]}</b><br><small>Rapor tarihi: ${fd(x.date)} · Kayıt: ${esc(x.at)}</small><div class="ac">${[['open','Aç'],['pdf','PDF'],['word','Word'],['xls','Excel'],['del','Sil']].map(([a,l])=>`<button class="${a==='del'?'del':''}" data-pa="${a}:${x.id}">${l}</button>`).join('')}</div></div>`).join(''):'<p>Henüz kaydedilmiş rapor yok. Bir rapor hazırlayıp Kaydet düğmesine basın.</p>'}</section>`}
+
+const NAV=[['home','Ana Sayfa'],['sev','Sevkiyat Operasyonu'],['izin','İzin ve Mesai'],['past','Geçmiş Raporlar']];
+function render(){$('#nav').innerHTML=NAV.map(([k,l])=>`<button class="${k===page?'on':''}" data-go="${k}">${l}</button>`).join('');
+$('#app').innerHTML={home:vHome,sev:vSev,izin:vIzin,past:vPast}[page]()}
+
+/* report spec -> Word, Excel, print */
+function spec(t,d){
+ if(t==='sev'){const s=d.st,L=x=>x||[],nm=lines(d.names),pl=lines(d.plates);return{title:'ÖZKURUŞLAR MERKEZ DEPO – SEVKİYAT OPERASYON RAPORU',meta:[['Rapor tarihi',fd(d.date)],['Raporlayan',d.reporter],['Sevkiyat sorumlusu',d.chief]],
+  tabs:[{h:'Filo ve personel durumu',c:['Gösterge','Değer','Açıklama'],r:[['Aktif sevkiyat şoförü',s.sofor,'Toplam '+d.tS+' şoför içinde'],['Bakım / izinli şoför',s.izinli,s.izinliN],['Sevkiyattaki kamyon',s.kamyon,s.kamyonN],['Pasif / servisteki kamyon',s.pasif,s.pasifN]]},
+  {h:'1. Operasyon ve sevkiyat özeti',c:['Parametre','Durum / değer','Açıklama'],r:L(d.rows).map(r=>[r.p,r.v,r.a])},
+  {h:'2. Personel / şoför durum detayı (toplam: '+d.tS+')',c:['Kategori','Sayı','Personel isimleri','Operasyonel statü / açıklama'],r:L(d.per).map(r=>[r.k,r.s,r.n,r.a])},
+  {h:'3. Kamyon filosu durum detayı (toplam: '+d.tK+' kamyon)',c:['Kategori','Sayı','Plakalar','Operasyonel durum'],r:L(d.fleet).map(r=>[r.k,r.s,r.n,r.a])}],
+  txt:[['Aktif sevkiyatta yer alan şoför listesi ('+nm.length+' personel)',nm.map(x=>'• '+x).join('\n')],['Sevkiyatta kullanılan kamyon plakaları ('+pl.length+' araç)',pl.join(' • ')],['4. Operasyonel aksama ve gecikme analizi: '+d.dT,lines(d.delay).map(x=>'•  '+x).join('\n')],['','Raporlayan: '+d.reporter+' | Bilgilerinize arz olunur.']]}}
+ if(t==='mesai'){const rs=d.rows.filter(r=>r.n);return{title:'ÖZKURUŞLAR MERKEZ DEPO – PERSONEL FAZLA MESAİ TAKİP RAPORU',meta:[['Rapor tarihi',fd(d.date)],['Raporu hazırlayan',d.prep],['Toplam fazla mesai personeli',rs.length]],
+  tabs:[{h:'1. Fazla mesai görev detayları',c:['#','Adı soyadı','Fazla mesai süresi','Görev / açıklama','Çıkış saati','Dönüş saati'],r:rs.map((r,i)=>[i+1,r.n,r.d,r.t,r.c,r.r])}],txt:[['2. Genel açıklamalar ve operasyonel notlar',d.note]]}}
+ const rs=d.rows.filter(r=>r.n);return{title:'ÖZKURUŞLAR MERKEZ DEPO – PERSONEL İZİN TAKİP RAPORU',meta:[['Rapor tarihi',fd(d.date)],['Raporu hazırlayan',d.prep],['Toplam personel',rs.length]],
+  tabs:[{h:'1. İzin kayıtları',c:['#','Adı soyadı','İzin türü','Başlangıç','Bitiş','Gün','Açıklama'],r:rs.map((r,i)=>[i+1,r.n,r.tur,fd(r.b),fd(r.s),days(r),r.a])}],txt:[['2. Genel açıklamalar',d.note]]}}
+function docHtml(t,d,img){const s=spec(t,d);
+ const tb=x=>`<h3>${esc(x.h)}</h3><table><tr>${x.c.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>${x.r.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table>`;
+ return `<div class="doc">${img?`<img src="${LOGO}" height="40">`:''}<h2>${esc(s.title)}</h2><table class="meta">${s.meta.map(m=>`<tr><td><b>${esc(m[0])}</b></td><td>${esc(m[1])}</td></tr>`).join('')}</table>${s.tabs.map(tb).join('')}${s.txt.map(x=>`<h3>${esc(x[0])}</h3><p>${esc(x[1]).replace(/\n/g,'<br>')}</p>`).join('')}</div>`}
+function dl(n,b){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}
+const fname=(t,d)=>(t==='sev'?'Sevkiyat-Raporu':t==='mesai'?'Fazla-Mesai-Raporu':'Izin-Raporu')+'_'+fd(d.date);
+function pdf(t,d){$('#print').innerHTML=docHtml(t,d,1);document.body.classList.add('pr');toast('Açılan pencerede "PDF olarak kaydet" seçin');setTimeout(()=>window.print(),400)}
+window.onafterprint=()=>document.body.classList.remove('pr');
+function word(t,d){const css='table{border-collapse:collapse;width:100%}td,th{border:1px solid #777;padding:4px;font:12px Arial}th{background:#dde6f5}.meta td{border:0}';
+ dl(fname(t,d)+'.doc',new Blob(['\ufeff<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><style>'+css+'</style></head><body>'+docHtml(t,d)+'</body></html>'],{type:'application/msword'}))}
+async function sevXlsx(d){const s=d.st,L=x=>x||[],nm=lines(d.names),pl=lines(d.plates);
+ const wb=new ExcelJS.Workbook(),ws=wb.addWorksheet('Tek Sayfa Rapor',{pageSetup:{orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:1}});
+ [25,10,25,31].forEach((w,i)=>ws.getColumn(i+1).width=w);
+ const bd={style:'thin',color:{argb:'FFBFC9D9'}},BR={top:bd,left:bd,bottom:bd,right:bd},N='FF172338',G='FF52627A',LB='FFEEF3F8',F6='FFF6F8FB',RD='FFFFF1F1';
+ const nv=v=>v===''||v==null||isNaN(v)?v:Number(v);
+ const est=(t,w,m)=>Math.max(m||22,String(t==null?'':t).split('\n').reduce((a,l)=>a+Math.max(1,Math.ceil(l.length/w)),0)*12.5+8);
+ const put=(n,c1,c2,v,o={})=>{if(c2>c1)ws.mergeCells(n,c1,n,c2);const c=ws.getCell(n,c1);c.value=v;c.font={name:'Arial',size:o.sz||9,bold:!!o.b,color:{argb:o.fc||N}};c.alignment={horizontal:o.h||'left',vertical:'middle',wrapText:true};
+  for(let k=c1;k<=c2;k++){const x=ws.getCell(n,k);if(o.bg)x.fill={type:'pattern',pattern:'solid',fgColor:{argb:o.bg}};if(!o.nb)x.border=BR}};
+ let r=1;const H=h=>{ws.getRow(r).height=h};
+ put(r,1,4,'ÖZKURUŞLAR MERKEZ DEPO',{sz:17,b:1});H(23);r++;
+ put(r,1,3,'SEVKİYAT OPERASYON RAPORU',{sz:16,b:1});put(r,4,4,'Rapor Tarihi',{sz:8,fc:G,h:'right'});H(23);r++;
+ put(r,1,2,'LOJİSTİK VE OPERASYON DİREKTÖRLÜĞÜ.',{fc:G,b:1});put(r,3,3,'SEVKİYAT SORUMLUSU: '+d.chief,{fc:G,b:1});put(r,4,4,fd(d.date),{sz:10,b:1,h:'right',nb:1});H(30);r+=2;
+ const cards=[['AKTİF SEVKİYAT ŞOFÖRÜ',s.sofor,'Toplam '+d.tS+' Şoför İçinde'],['BAKIM / İZİNLİ ŞOFÖR',s.izinli,s.izinliN],['SEVKİYATTAKİ KAMYON',s.kamyon,s.kamyonN],['PASİF / SERVİSTEKİ KAMYON',s.pasif,s.pasifN]];
+ cards.forEach((c,i)=>put(r,i+1,i+1,c[0],{sz:8,b:1,fc:G,bg:LB,h:'center'}));H(24);r++;
+ cards.forEach((c,i)=>put(r,i+1,i+1,nv(c[1]),{sz:16,b:1,bg:LB,h:'center'}));H(26);r++;
+ cards.forEach((c,i)=>put(r,i+1,i+1,c[2],{sz:8,fc:G,bg:LB,h:'center'}));H(Math.max(24,est(cards[1][2],11),est(cards[3][2],35)));r+=2;
+ const sec=t=>{put(r,1,4,t,{sz:11,b:1,nb:1});H(24);r++};
+ const tbl=(hd,rows,tn)=>{hd.forEach((h,i)=>put(r,i+1,i+1,h,{b:1,bg:LB}));H(22);r++;
+  rows.forEach((x,j)=>{x.forEach((v,i)=>put(r,i+1,i+1,i===1?nv(v):v,{b:i===0,bg:i===3?tn[j%tn.length]:null,h:i===1?'center':'left'}));H(Math.max(est(x[0],28,30),est(x[1],11),est(x[2],28),est(x[3],35)));r++});r++};
+ sec('1. OPERASYON VE SEVKİYAT ÖZETİ');
+ put(r,1,1,'Parametre',{b:1,bg:LB});put(r,2,2,'Durum / Değer',{b:1,bg:LB});put(r,3,4,'Açıklama',{b:1,bg:LB});H(22);r++;
+ L(d.rows).forEach(x=>{put(r,1,1,x.p,{b:1});put(r,2,2,x.v);put(r,3,4,x.a);H(Math.max(32,est(x.p,28),est(x.v,11),est(x.a,66)));r++});r++;
+ sec('2. PERSONEL / ŞOFÖR DURUM DETAYI (TOPLAM: '+d.tS+')');
+ tbl(['Kategori','Sayı','Personel İsimleri','Operasyonel Statü / Açıklama'],L(d.per).map(x=>[x.k,x.s,x.n,x.a]),['FFDDF5E4','FFE8F3FB','FFFFF0CC']);
+ put(r,1,4,'AKTİF SEVKİYATTA YER ALAN ŞOFÖR LİSTESİ ('+nm.length+' PERSONEL):',{fc:G,b:1});H(22);r++;
+ for(let i=0;i<nm.length;i+=4){for(let k=0;k<4;k++)put(r,k+1,k+1,nm[i+k]?'• '+nm[i+k]:'',{sz:8,bg:F6});H(Math.max(19,...[0,1,2,3].map(k=>est(nm[i+k],[28,11,28,35][k]))));r++}r++;
+ sec('3. KAMYON FİLOSU DURUM DETAYI (TOPLAM: '+d.tK+' KAMYON)');
+ tbl(['Kategori','Sayı','Plakalar','Operasyonel Durum'],L(d.fleet).map(x=>[x.k,x.s,x.n,x.a]),['FFDDF5E4','FFFDE4E4','FFE8F3FB']);
+ put(r,1,4,'SEVKİYATTA KULLANILAN KAMYON PLAKALARI ('+pl.length+' ARAÇ):',{fc:G,b:1});H(22);r++;
+ put(r,1,4,pl.join(' • '),{bg:F6});H(est(pl.join(' • '),100,30));r+=2;
+ sec('4. OPERASYONEL AKSAMA VE GECİKME ANALİZİ');
+ put(r,1,4,d.dT,{sz:10,b:1,fc:'FFB42318',bg:RD});H(24);r++;
+ lines(d.delay).forEach(x=>{put(r,1,4,'•  '+x,{bg:RD});H(est(x,100,30));r++});r++;
+ put(r,1,4,'Raporlayan: '+d.reporter+' | Bilgilerinize arz olunur.',{h:'right'});H(28);
+ ws.pageSetup.printArea='A1:D'+r;
+ const buf=await wb.xlsx.writeBuffer();dl(fname('sev',d)+'.xlsx',new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))}
+function xls(t,d){if(t==='sev'&&window.ExcelJS){sevXlsx(d).catch(()=>toast('Excel oluşturulamadı'));return}
+const s=spec(t,d),a=[[s.title],...s.meta,[]];s.tabs.forEach(x=>a.push([x.h],x.c,...x.r,[]));s.txt.forEach(x=>a.push([x[0]],[x[1]],[]));const n=fname(t,d);
+ if(window.XLSX){const ws=XLSX.utils.aoa_to_sheet(a);ws['!cols']=[{wch:30},{wch:24},{wch:22},{wch:28},{wch:14},{wch:14},{wch:26}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Rapor');XLSX.writeFile(wb,n+'.xlsx')}
+ else{dl(n+'.csv',new Blob(['\ufeff'+a.map(r=>r.map(c=>'"'+String(c==null?'':c).replace(/"/g,'""')+'"').join(';')).join('\r\n')],{type:'text/csv'}));toast('İnternet yok: Excel yerine CSV indirildi')}}
+function save(t){const d=getD(t),r=LS.get('ozk_r',[]);d.id=d.id||Date.now();
+ const rec={id:d.id,type:t,date:d.date,at:new Date().toLocaleString('tr-TR'),data:JSON.parse(JSON.stringify(d))},i=r.findIndex(x=>x.id===d.id);
+ if(i>=0)r[i]=rec;else r.unshift(rec);LS.set('ozk_r',r);saveD(t);const o=LS.get('ozk_auto',{xls:1,pdf:1});toast('Rapor kaydedildi'+(o.xls||o.pdf?', dosyalar hazırlanıyor':''));if(o.xls)xls(t,d);if(o.pdf)setTimeout(()=>pdf(t,d),1500)}
+const EXP={pdf,word,xls};
+const A={save,draft:t=>{saveD(t);toast('Taslak kaydedildi')},pdf:t=>pdf(t,getD(t)),word:t=>word(t,getD(t)),xls:t=>xls(t,getD(t)),
+ new:t=>{if(confirm('Form temizlensin ve yeni rapor başlatılsın mı?')){drafts[t]=blank[t]();saveD(t);render();scrollTo(0,0)}}};
+
+/* otomatik indirme seçenekleri */
+const autoBox=()=>{const o=LS.get('ozk_auto',{xls:1,pdf:1}),c=(k,l)=>`<label style="display:inline-flex;gap:6px;align-items:center;margin-right:16px"><input type="checkbox" data-ax="${k}" style="width:auto"${o[k]?' checked':''}>${l}</label>`;return `<div class="note"><b>Kaydet düğmesine basınca otomatik hazırla:</b><br>${c('xls','Excel')}${c('pdf','PDF')}</div>`};
+
+/* events */
+function onInput(e){const el=e.target,f=el.dataset.f;if(el.dataset.ax){const o=LS.get('ozk_auto',{xls:1,pdf:1});o[el.dataset.ax]=el.checked?1:0;LS.set('ozk_auto',o);return}if(!f)return;const t=el.dataset.t,d=getD(t);setPath(d,f,el.value);saveD(t);
+ if(t==='mesai'&&$('#tot'))$('#tot').value=d.rows.filter(r=>r.n).length;
+ const m=f.match(/^rows\.(\d+)\.[bs]$/);if(t==='izin'&&m)$('#g'+m[1]).value=days(d.rows[m[1]])}
+document.addEventListener('input',onInput);
+document.addEventListener('change',onInput);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go],[data-sub],[data-act],[data-add],[data-del],[data-pa]');if(!b)return;const D=b.dataset;
+ if(D.go){page=D.go;render();scrollTo(0,0)}
+ else if(D.sub){sub=D.sub;render()}
+ else if(D.add){const[t,k]=D.add.split(':');getD(t)[k||'rows'].push({});saveD(t);render()}
+ else if(D.del){const p=D.del.split(':'),i=p.pop(),t=p[0];getD(t)[p[1]||'rows'].splice(+i,1);saveD(t);render()}
+ else if(D.act){const[a,t]=D.act.split(':');A[a](t)}
+ else if(D.pa){const[a,id]=D.pa.split(':'),r=LS.get('ozk_r',[]),x=r.find(z=>String(z.id)===id);if(!x)return;
+  if(a==='open'){drafts[x.type]=fix(x.type,JSON.parse(JSON.stringify(x.data)));saveD(x.type);page=x.type==='sev'?'sev':'izin';if(x.type!=='sev')sub=x.type;render();scrollTo(0,0)}
+  else if(a==='del'){if(confirm('Rapor silinsin mi?')){LS.set('ozk_r',r.filter(z=>String(z.id)!==id));render()}}
+  else EXP[a](x.type,fix(x.type,x.data))}});
+if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+$('#hd').textContent=fd(today());
+render();
+</script>
+</body>
+</html>
